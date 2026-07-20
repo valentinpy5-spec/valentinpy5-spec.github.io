@@ -1,4 +1,4 @@
 User-agent: *
 Disallow:
 
-Sitemap: https://valentinpy.github.io/al-folio/sitemap.xml
+Sitemap: https://valentinpy.github.io/sitemap.xml
