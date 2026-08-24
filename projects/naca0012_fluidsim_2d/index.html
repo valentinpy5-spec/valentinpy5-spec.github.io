@@ -1,0 +1,500 @@
+<!DOCTYPE html> <html lang="en"> <head> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> <meta http-equiv="X-UA-Compatible" content="IE=edge"> <title> NACA0012 Flow Solver: Semi-Lagrangian / Pressure Projection | Valentin PY - Portfolio </title> <meta name="author" content="Valentin PY"> <meta name="description" content="A 2D incompressible Navier-Stokes solver around a NACA0012 airfoil, built on a MAC staggered grid with semi-Lagrangian advection and a matrix-free conjugate-gradient pressure projection."> <meta name="keywords" content="jekyll, jekyll-theme, academic-website, portfolio-website"> <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; font-src 'self' data: https:; media-src 'self' https:; frame-src 'self' https:; connect-src 'self' https:;"> <style>
+  :root {
+    --max-content-width: 930px;
+  }
+</style> <link rel="stylesheet" href="/assets/css/tailwind.css?v=50c64c15cbb9fd1ce6056fdb8bcb4b62"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" integrity="sha256-MVopmdyC2tYTiJ8wlktf0uh0v4NgT+vNdyVFepi7Q0c=" crossorigin="anonymous"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.5/css/academicons.min.css" integrity="sha256-SzrCOBJbGVFMahewkgjwnApaV2+av1DwMAA+/QGLyZw=" crossorigin="anonymous"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/scholar-icons@1.0.3/css/scholar-icons.css" integrity="sha256-VY3hHVj/hNX3fYG6wtbA6TcKJQl7+FthzGSyIB64klY=" crossorigin="anonymous"> <link defer rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons&amp;display=swap"> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-github.css?v=591dab5a4e56573bf4ef7fd332894c99" media="" id="highlight_theme_light"> <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%E2%9A%9B%EF%B8%8F&lt;/text&gt;&lt;/svg&gt;"> <link rel="stylesheet" href="/assets/css/main.css?v=f0b101217084a90093badfe99ff9a7d1"> <link rel="canonical" href="https://valentinpy5-spec.github.io/projects/naca0012_fluidsim_2d/"> <script src="/assets/js/theme.js?v=7af685e2ba20b37fef545c97b8064050"></script> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-native.css?v=5847e5ed4a4568527aa6cfab446049ca" media="none" id="highlight_theme_dark"> <script>
+    initTheme();
+  </script> </head> <body class="fixed-top-nav "> <header> <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top" role="navigation"> <div class="container"> <a class="navbar-brand title font-weight-lighter" href="/"> Valentin PY - Portfolio </a> <button class="navbar-toggler collapsed navbar-toggler-main" type="button" data-nav-toggle="navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar top-bar"></span> <span class="icon-bar middle-bar"></span> <span class="icon-bar bottom-bar"></span> </button> <div class="collapse navbar-collapse navbar-collapse-main" id="navbarNav"> <ul class="navbar-nav navbar-menu-list flex-nowrap"> <li class="nav-item "> <a class="nav-link" href="/">about </a> </li> <li class="nav-item active"> <a class="nav-link" href="/projects/">projects <span class="sr-only">(current)</span> </a> </li> <li class="nav-item "> <a class="nav-link" href="/cv/">CV </a> </li> <li class="nav-item"> <button id="search-toggle" type="button" title="Search" aria-label="Open search"> <span class="nav-link">ctrl k <i class="fa-solid fa-magnifying-glass"></i></span> </button> </li> <li class="toggle-container"> <button id="light-toggle" type="button" title="Change theme" aria-label="Change color theme"> <i class="fa-half-sun-moon" id="light-toggle-system"></i> <i class="fa-solid fa-moon" id="light-toggle-dark"></i> <i class="fa-solid fa-sun" id="light-toggle-light"></i> </button> </li> </ul> </div> </div> </nav> <progress id="progress" value="0"> <div class="progress-container"> <span class="progress-bar"></span> </div> </progress> </header> <div class="container mt-5" role="main"> <div class="post"> <header class="post-header"> <h1 class="post-title">NACA0012 Flow Solver: Semi-Lagrangian / Pressure Projection</h1> <p class="post-description">A 2D incompressible Navier-Stokes solver around a NACA0012 airfoil, built on a MAC staggered grid with semi-Lagrangian advection and a matrix-free conjugate-gradient pressure projection.</p> </header> <article> <div class="mb-3"> <a href="https://github.com/valentinpy5-spec/aerodynamic-sim" target="_blank" rel="noopener noreferrer" class="btn btn-outline-dark"> <i class="fa-brands fa-github fa-lg"></i>  View on GitHub </a> </div> <h2 id="what-this-project-is">What this project is</h2> <p>A from-scratch incompressible Navier-Stokes solver for 2D flow around a NACA0012 airfoil, built directly on the classic <strong>MAC (Marker-and-Cell) staggered grid</strong> formulation rather than a collocated grid: pressure lives at cell centers, and each velocity component lives on its own face. This is the CPU predecessor to the GPU Lattice-Boltzmann version of this project (<a href="/projects/naca0012_lbm_gpu/">see the LBM GPU solver</a>), and the two take genuinely different numerical approaches to the same physical problem, which is part of why keeping both is useful: one solves Navier-Stokes directly through a pressure projection, the other never forms a pressure field at all.</p> <p>The code is organized around <code class="language-plaintext highlighter-rouge">src/StaggeredGrid.cpp</code>, <code class="language-plaintext highlighter-rouge">src/PressureSolver.cpp</code>, and <code class="language-plaintext highlighter-rouge">src/FluidSimulator.cpp</code>. The overall structure (staggered-grid classes, the semi-Lagrangian/pressure-projection split, some method names and comments) follows <a href="https://unusualinsights.github.io/fluid_tutorial/#home" rel="external nofollow noopener" target="_blank">Doyub Kim’s fluid simulation tutorial</a>, which was the starting point for this project; the airfoil geometry, 2D boundary conditions, and initial conditions, and the removal of the tutorial’s FLIP/PIC particle layer in favor of a purely grid-based Eulerian solver, are specific to this project.</p> <div class="row"> <div class="col-sm mt-3 mt-md-0"> <figure> <picture> <source class="responsive-img-srcset" srcset="/assets/img/projects/naca0012_fluidsim_2d/naca0012_velocity-480.webp 480w,/assets/img/projects/naca0012_fluidsim_2d/naca0012_velocity-800.webp 800w,/assets/img/projects/naca0012_fluidsim_2d/naca0012_velocity-1400.webp 1400w," type="image/webp" sizes="95vw"></source> <img src="/assets/img/projects/naca0012_fluidsim_2d/naca0012_velocity.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" title="Velocity field around the NACA0012" loading="eager" onerror="this.onerror=null; document.querySelectorAll('.responsive-img-srcset').forEach(function (n) { n.remove(); });"> </picture> </figure> </div> <div class="col-sm mt-3 mt-md-0"> <figure> <picture> <source class="responsive-img-srcset" srcset="/assets/img/projects/naca0012_fluidsim_2d/naca0012_pressure-480.webp 480w,/assets/img/projects/naca0012_fluidsim_2d/naca0012_pressure-800.webp 800w,/assets/img/projects/naca0012_fluidsim_2d/naca0012_pressure-1400.webp 1400w," type="image/webp" sizes="95vw"></source> <img src="/assets/img/projects/naca0012_fluidsim_2d/naca0012_pressure.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" title="Pressure field around the NACA0012" loading="eager" onerror="this.onerror=null; document.querySelectorAll('.responsive-img-srcset').forEach(function (n) { n.remove(); });"> </picture> </figure> </div> </div> <div class="caption"> Left: velocity/dye field, showing the boundary layer and wake behind the airfoil. Right: the corresponding pressure field solved by conjugate gradient, showing the stagnation region at the leading edge and the low-pressure zone over the upper surface. </div> <h2 id="the-governing-equations-split-into-three-sub-problems">The governing equations, split into three sub-problems</h2> <p>The solver targets the incompressible Navier-Stokes equations, but rather than discretizing them as one coupled system, it follows the classical <strong>operator-splitting</strong> strategy (Chorin’s projection method, as formalized for graphics by Stam and by Bridson): each timestep is broken into an advection sub-step, a body-force sub-step, and a pressure/incompressibility sub-step, solved one after another rather than simultaneously.</p> <div class="row justify-content-sm-center"> <div class="col-sm-6 mt-3 mt-md-0"> <figure> <picture> <source class="responsive-img-srcset" srcset="/assets/img/projects/naca0012_fluidsim_2d/bridson_eq_ns_split-480.webp 480w,/assets/img/projects/naca0012_fluidsim_2d/bridson_eq_ns_split-800.webp 800w,/assets/img/projects/naca0012_fluidsim_2d/bridson_eq_ns_split-1400.webp 1400w," type="image/webp" sizes="95vw"></source> <img src="/assets/img/projects/naca0012_fluidsim_2d/bridson_eq_ns_split.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" title="Navier-Stokes split into advection, body forces, and pressure projection" loading="eager" onerror="this.onerror=null; document.querySelectorAll('.responsive-img-srcset').forEach(function (n) { n.remove(); });"> </picture> </figure> </div> </div> <div class="caption"> The three-way operator split (Bridson, eq. 2.8-2.10) this solver follows every timestep: advect a quantity along the flow ($Dq/Dt = 0$), apply body forces, then project the velocity field onto its divergence-free component by solving for pressure. </div> <p>Concretely, <code class="language-plaintext highlighter-rouge">FluidSimulator</code>’s per-frame loop calls <code class="language-plaintext highlighter-rouge">AdvectVelocity</code> (the $Dq/Dt=0$ sub-step, applied to velocity itself), then adds gravity/external forces, then calls <code class="language-plaintext highlighter-rouge">ProjectPressure</code> (the $\partial\vec u/\partial t + \tfrac1\rho\nabla p = 0$ sub-step, solved so that the constraint $\nabla\cdot\vec u = 0$ holds afterward); each sub-step is solved to good accuracy on its own, and the splitting error this introduces is first-order in $\Delta t$, the standard trade-off of this family of methods.</p> <h2 id="why-a-staggered-grid-and-what-problem-it-solves">Why a staggered grid, and what problem it solves</h2> <p>Storing pressure and all velocity components at the same grid point (a collocated arrangement) leads to a well-known failure mode in incompressible solvers: the discrete pressure gradient and divergence operators can develop a null space, letting a checkerboard pressure pattern exist that produces zero force on the velocity field and is therefore invisible to the solver. The MAC grid sidesteps this entirely by never colocating pressure and velocity.</p> <div class="row justify-content-sm-center"> <div class="col-sm-6 mt-3 mt-md-0"> <figure> <picture> <source class="responsive-img-srcset" srcset="/assets/img/projects/naca0012_fluidsim_2d/bridson_fig2_1_mac_grid-480.webp 480w,/assets/img/projects/naca0012_fluidsim_2d/bridson_fig2_1_mac_grid-800.webp 800w,/assets/img/projects/naca0012_fluidsim_2d/bridson_fig2_1_mac_grid-1400.webp 1400w," type="image/webp" sizes="95vw"></source> <img src="/assets/img/projects/naca0012_fluidsim_2d/bridson_fig2_1_mac_grid.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" title="The two-dimensional MAC grid" loading="eager" onerror="this.onerror=null; document.querySelectorAll('.responsive-img-srcset').forEach(function (n) { n.remove(); });"> </picture> </figure> </div> </div> <div class="caption"> The 2D MAC grid (Bridson, fig. 2.1): pressure $p_{i,j}$ at cell centers, $u_{i\pm 1/2,j}$ on vertical faces, $v_{i,j\pm 1/2}$ on horizontal faces. `StaggeredGrid` implements exactly this layout as four separate grid arrays (`u_`, `v_`, `w_`, `p_`), each sized one larger than the cell grid in its own staggered direction, so the discrete divergence and gradient operators are natural adjoints of each other by construction. </div> <h2 id="semi-lagrangian-advection-with-a-midpoint-backtrace">Semi-Lagrangian advection with a midpoint backtrace</h2> <p>Advection is handled by tracing each grid point backward through the velocity field to find where its value came from one timestep ago, rather than discretizing the advection term directly: the classic semi-Lagrangian approach, which is unconditionally stable regardless of the CFL number (unlike explicit upwinding).</p> <div class="row justify-content-sm-center"> <div class="col-sm-6 mt-3 mt-md-0"> <figure> <picture> <source class="responsive-img-srcset" srcset="/assets/img/projects/naca0012_fluidsim_2d/bridson_fig3_1_semilagrangian-480.webp 480w,/assets/img/projects/naca0012_fluidsim_2d/bridson_fig3_1_semilagrangian-800.webp 800w,/assets/img/projects/naca0012_fluidsim_2d/bridson_fig3_1_semilagrangian-1400.webp 1400w," type="image/webp" sizes="95vw"></source> <img src="/assets/img/projects/naca0012_fluidsim_2d/bridson_fig3_1_semilagrangian.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" title="Semi-Lagrangian backtrace" loading="eager" onerror="this.onerror=null; document.querySelectorAll('.responsive-img-srcset').forEach(function (n) { n.remove(); });"> </picture> </figure> </div> </div> <div class="caption"> The semi-Lagrangian idea (Bridson, fig. 3.1): to find the new value at grid point $\vec x_G$, trace backward along the velocity field to the departure point $\vec x_P$ where that fluid parcel was one timestep ago, and interpolate the old field there. </div> <p><code class="language-plaintext highlighter-rouge">StaggeredGrid::AdvectVelocity</code> does this with a second-order <strong>RK2 midpoint</strong> backtrace rather than a single Euler step:</p> \[\vec x_{\text{mid}} = \vec x_G - \tfrac{1}{2}\Delta t\,\vec u(\vec x_G), \qquad \vec x_P = \vec x_G - \Delta t\,\vec u(\vec x_{\text{mid}})\] <p>i.e. it evaluates the velocity at the query point, steps half a timestep backward to get a midpoint, re-evaluates the velocity there, and only then takes the full backward step from that midpoint estimate. This is meaningfully more accurate than a naive one-step backtrace, at the cost of one extra trilinear interpolation per grid point per step. Solid cells (inside the airfoil) are excluded from the backtrace target via <code class="language-plaintext highlighter-rouge">ClampToNonSolidCells</code>, which snaps any backtraced position landing inside the airfoil to the nearest fluid cell center instead.</p> <h2 id="enforcing-incompressibility-discretizing-the-pressure-poisson-equation">Enforcing incompressibility: discretizing the pressure Poisson equation</h2> <p>After advection, the velocity field is generally not divergence-free, which is required for incompressible flow. Enforcing $\nabla\cdot\vec u=0$ after the fact means solving a discrete Poisson equation for pressure. Bridson’s derivation makes both discretizations, divergence and Laplacian, explicit side by side:</p> <div class="row justify-content-sm-center"> <div class="col-sm-9 mt-3 mt-md-0"> <figure> <picture> <source class="responsive-img-srcset" srcset="/assets/img/projects/naca0012_fluidsim_2d/bridson_discretization_divergence_laplacian-480.webp 480w,/assets/img/projects/naca0012_fluidsim_2d/bridson_discretization_divergence_laplacian-800.webp 800w,/assets/img/projects/naca0012_fluidsim_2d/bridson_discretization_divergence_laplacian-1400.webp 1400w," type="image/webp" sizes="95vw"></source> <img src="/assets/img/projects/naca0012_fluidsim_2d/bridson_discretization_divergence_laplacian.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" title="Discretizing the divergence of velocity and the Laplacian of pressure" loading="eager" onerror="this.onerror=null; document.querySelectorAll('.responsive-img-srcset').forEach(function (n) { n.remove(); });"> </picture> </figure> </div> </div> <div class="caption"> The velocity divergence at cell $(i,j,k)$ (blue) is a centered finite difference of the face velocities; the pressure Laplacian (red) is the standard 7-point stencil in 3D (5-point in the 2D case this project actually runs). Setting divergence-after-projection to zero and solving for $p$ gives exactly this equation. </div> <p>Each pressure unknown only couples to its 4 immediate neighbors (2D) or 6 (3D), which is why the resulting linear system is extremely sparse: only the diagonal and a few off-diagonal bands are ever nonzero, visualized directly in Bridson’s matrix form:</p> <div class="row justify-content-sm-center"> <div class="col-sm-9 mt-3 mt-md-0"> <figure> <picture> <source class="responsive-img-srcset" srcset="/assets/img/projects/naca0012_fluidsim_2d/bridson_linear_system-480.webp 480w,/assets/img/projects/naca0012_fluidsim_2d/bridson_linear_system-800.webp 800w,/assets/img/projects/naca0012_fluidsim_2d/bridson_linear_system-1400.webp 1400w," type="image/webp" sizes="95vw"></source> <img src="/assets/img/projects/naca0012_fluidsim_2d/bridson_linear_system.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" title="The sparse linear system for pressure" loading="eager" onerror="this.onerror=null; document.querySelectorAll('.responsive-img-srcset').forEach(function (n) { n.remove(); });"> </picture> </figure> </div> </div> <div class="caption"> One row of the pressure system: a fluid cell's own pressure carries coefficient 6 (its number of neighbor faces, 2D case here is 4), each fluid neighbor carries -1, and the right-hand side is the (negated) velocity divergence at that cell, scaled by $\rho(\Delta x)^2/\Delta t$. This is exactly the system `PressureSolver` assembles implicitly, one row per fluid cell. </div> <p>Each pressure unknown only appears in the equations for the cells that share a face with it, which is also visible directly on the grid: the coupling runs entirely through the four adjacent face velocities, and nowhere else.</p> <div class="row justify-content-sm-center"> <div class="col-sm-6 mt-3 mt-md-0"> <figure> <picture> <source class="responsive-img-srcset" srcset="/assets/img/projects/naca0012_fluidsim_2d/bridson_pressure_sample_stencil-480.webp 480w,/assets/img/projects/naca0012_fluidsim_2d/bridson_pressure_sample_stencil-800.webp 800w,/assets/img/projects/naca0012_fluidsim_2d/bridson_pressure_sample_stencil-1400.webp 1400w," type="image/webp" sizes="95vw"></source> <img src="/assets/img/projects/naca0012_fluidsim_2d/bridson_pressure_sample_stencil.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" title="Pressure sample and its four neighboring velocity faces" loading="eager" onerror="this.onerror=null; document.querySelectorAll('.responsive-img-srcset').forEach(function (n) { n.remove(); });"> </picture> </figure> </div> </div> <div class="caption"> A single pressure sample $p$ and its four neighboring face velocities. Each of these faces contributes one term to the divergence at this cell, and, after projection, is corrected by the pressure difference across it: this is the local picture behind the global sparse system above. </div> <h2 id="solving-the-system-matrix-free-conjugate-gradient">Solving the system: matrix-free conjugate gradient</h2> <p>The linear system above is symmetric positive-definite by construction (a discrete Laplacian restricted to fluid cells), which makes <strong>conjugate gradient (CG)</strong> the natural choice: it converges monotonically in the $A$-norm of the error, needs only matrix-vector products (no factorization), and for a well-conditioned sparse system like this one typically converges in far fewer than $N$ iterations. <code class="language-plaintext highlighter-rouge">PressureSolver::ProjectPressure</code> implements CG without ever assembling the matrix $A$ explicitly:</p> \[\mathbf r_0 = \mathbf b - A\mathbf p_0, \quad \mathbf d_0 = \mathbf r_0, \qquad \alpha_k = \frac{\mathbf r_k^\top \mathbf r_k}{\mathbf d_k^\top A\mathbf d_k}, \qquad \mathbf p_{k+1} = \mathbf p_k + \alpha_k \mathbf d_k, \qquad \mathbf r_{k+1} = \mathbf r_k - \alpha_k A\mathbf d_k\] \[\beta_k = \frac{\mathbf r_{k+1}^\top \mathbf r_{k+1}}{\mathbf r_k^\top \mathbf r_k}, \qquad \mathbf d_{k+1} = \mathbf r_{k+1} + \beta_k \mathbf d_k\] <p><code class="language-plaintext highlighter-rouge">ATimes</code> computes every matrix-vector product $A\mathbf d$ on the fly from a per-cell neighbor bitmask (<code class="language-plaintext highlighter-rouge">neighbors_</code>, built by <code class="language-plaintext highlighter-rouge">MakeNeighborMaterialInfo</code>): for each fluid cell it reads off which of its neighbors are also fluid, applies the corresponding stencil (a <code class="language-plaintext highlighter-rouge">6</code> or <code class="language-plaintext highlighter-rouge">4</code> on the diagonal depending on dimensionality, and a <code class="language-plaintext highlighter-rouge">-1</code> for each fluid neighbor, exactly as in the matrix above); <code class="language-plaintext highlighter-rouge">SOLID</code> neighbors simply drop out of the sum, which is how the immersed airfoil boundary enters the pressure solve without ever needing a boundary-fitted mesh. This avoids ever storing the (very sparse, but still large) system matrix, at the cost of recomputing the stencil pattern lookup every iteration, a standard trade-off in CFD pressure solvers where the matrix structure is fixed but large. Once $p$ converges, <code class="language-plaintext highlighter-rouge">SubtractPressureGradientFromVelocity</code> applies the correction $\vec u \mathrel{-}= \Delta t\,\nabla p/\rho$ face by face, which is what actually restores $\nabla\cdot\vec u = 0$.</p> <h2 id="handling-the-airfoil-as-an-immersed-boundary">Handling the airfoil as an immersed boundary</h2> <p>The NACA0012 profile is not meshed; it is voxelized directly onto the Cartesian grid from the standard 4-digit NACA thickness formula (<code class="language-plaintext highlighter-rouge">StaggeredGrid::NACA0012</code>, <code class="language-plaintext highlighter-rouge">IsInsideNACA0012</code>), the same closed-form profile used in the GPU LBM version of this project. Every grid cell is classified <code class="language-plaintext highlighter-rouge">FLUID</code> or <code class="language-plaintext highlighter-rouge">SOLID</code> at initialization and after every angle-of-attack change (<code class="language-plaintext highlighter-rouge">ResetForAlpha</code>), and the no-slip condition on the airfoil surface is enforced by directly zeroing every velocity face adjacent to a <code class="language-plaintext highlighter-rouge">SOLID</code> cell (<code class="language-plaintext highlighter-rouge">EnforceSolidVelocities</code>), rather than through boundary-fitted mesh cells. This immersed-boundary approach is what makes the “change angle of attack live at runtime” interaction possible: changing α only requires re-voxelizing which cells are solid, never regenerating a mesh.</p> <h2 id="lift-from-circulation-not-from-a-surface-pressure-integral">Lift from circulation, not from a surface pressure integral</h2> <p>Unlike a typical panel-method or RANS solver, lift here is not computed by integrating pressure over the airfoil surface. <code class="language-plaintext highlighter-rouge">StaggeredGrid::ComputeLift</code> instead evaluates the circulation Γ around a rectangular contour enclosing the airfoil, by summing <code class="language-plaintext highlighter-rouge">u·dx</code> and <code class="language-plaintext highlighter-rouge">v·dy</code> along the four sides of that box, and applies the <strong>Kutta-Joukowski theorem</strong>:</p> \[C_l = \frac{2\Gamma}{U_\infty \cdot c}\] <p>This is an inviscid-flow result, strictly valid only for irrotational flow outside the boundary layer, appropriate here given the solver has no explicit turbulence closure, but worth stating plainly rather than implying the lift estimate accounts for viscous effects it does not model.</p> <h2 id="whats-next">What’s next</h2> <p>The most direct next step, already explored in the GPU LBM rewrite of this same problem, is comparing the two solvers’ drag and wake structure at matched Reynolds number: the LBM version computes forces through momentum exchange at the solid boundary (Ladd’s method) rather than through circulation, so the two give genuinely independent estimates of the same physical quantity and are a natural cross-check of each other.</p> <h2 id="references">References</h2> <ul> <li>Bridson, R., <em>Fluid Simulation for Computer Graphics</em>, 2nd edition, CRC Press, 2015: MAC grid formulation, the advection/forces/pressure operator split, semi-Lagrangian advection, and the pressure Poisson discretization and matrix-free conjugate-gradient solve; this project follows Bridson’s staggered-grid conventions throughout, and every boxed figure above is reproduced from this text.</li> <li>Kim, D., <a href="https://unusualinsights.github.io/fluid_tutorial/#home" rel="external nofollow noopener" target="_blank"><em>Fluid Simulation for Computer Graphics: A Practical Guide</em></a>: the tutorial this project’s overall code structure was originally built from, before being reworked for a 2D NACA0012 case without FLIP/PIC.</li> <li>Stam, J., <em>Stable Fluids</em>, SIGGRAPH 1999: semi-Lagrangian (backward-trace) advection scheme underlying <code class="language-plaintext highlighter-rouge">AdvectVelocity</code>.</li> <li>Anderson, J. D., <em>Fundamentals of Aerodynamics</em>, McGraw-Hill: Kutta-Joukowski circulation theorem used in <code class="language-plaintext highlighter-rouge">ComputeLift</code>.</li> </ul> </article> </div> </div> <footer class="fixed-bottom" role="contentinfo"> <div class="container mt-0"> © Copyright 2026 Valentin PY. Powered by <a href="https://jekyllrb.com/" target="_blank" rel="external nofollow noopener">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio" rel="external nofollow noopener" target="_blank">al-folio</a> theme. Hosted by <a href="https://pages.github.com/" target="_blank" rel="external nofollow noopener">GitHub Pages</a>. Photos from <a href="https://unsplash.com" target="_blank" rel="external nofollow noopener">Unsplash</a>. </div> </footer> <script>
+  window.alFolio = {
+    compatBootstrap: false
+  };
+</script> <script src="/assets/js/nav-toggle.js?v=141bd79a73ebc0f0b6ea58e440ae79fc"></script> <script defer src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script> <script defer src="https://cdn.jsdelivr.net/npm/imagesloaded@5.0.0/imagesloaded.pkgd.min.js" integrity="sha256-htrLFfZJ6v5udOG+3kNLINIKh2gvoKqwEhHYfTTMICc=" crossorigin="anonymous"></script> <script defer src="/assets/js/masonry.js?v=e49affc7bd2646f6acdad1dbe02c2359" type="text/javascript"></script> <script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script> <script src="/assets/al_math/js/mathjax-setup.js"></script> <script defer src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6" crossorigin="anonymous"></script> <script src="/assets/js/tooltips-setup.js?v=fe487e99db6c43751e6e7bdb2d6a0611"></script> <script src="/assets/js/no_defer.js?v=53b1b1a645525975c963ce8bf8bfefcf"></script> <script defer src="/assets/js/common.js?v=87baac90f765f2f3362dcf6aaf312a8a"></script> <script defer src="/assets/js/copy_code.js?v=c8a01c11a92744d44b093fc3bda915df" type="text/javascript"></script> <script defer src="/assets/js/jupyter_new_tab.js?v=896d254890d9b47f0281f63bfccf0dee"></script> <script async src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script> <script async src="https://badge.dimensions.ai/badge.js"></script> <script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script> <script defer src="/assets/al_img_tools/js/zoom.js"></script> <script defer src="/assets/js/progress-bar.js?v=499464c5c63ced6cf7ad62509f1e2610" type="text/javascript"></script> <script src="https://cdn.jsdelivr.net/npm/vanilla-back-to-top@7.2.1/dist/vanilla-back-to-top.min.js" integrity="sha256-uMJJ3EoTyfRBoTbR+lrfu1uRQ87RZG8AR3cVNuQVeFg=" crossorigin="anonymous"></script> <script>
+    addBackToTop();
+  </script> <script type="module" src="/assets/al_search/js/search/ninja-keys.min.js"></script> <ninja-keys hidebreadcrumbs noautoloadmdicons placeholder="Type to start searching"></ninja-keys> <script src="/assets/al_search/js/search-setup.js"></script> <script>
+// get the ninja-keys element
+const ninja = document.querySelector('ninja-keys');
+
+// add the home and posts menu items
+ninja.data = [{
+    id: "nav-about",
+    title: "about",
+    section: "Navigation",
+    handler: () => {
+      window.location.href = "/";
+    },
+  },{id: "nav-projects",
+          title: "projects",
+          description: "",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/projects/";
+          },
+        },{id: "nav-cv",
+          title: "CV",
+          description: "Curriculum vitae - Aerospace Engineering / CFD / Numerical Methods.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/cv/";
+          },
+        },{id: "post-a-post-with-plotly-js",
+        
+          title: "a post with plotly.js",
+        
+        description: "this is what included plotly.js code could look like",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2025/plotly/";
+          
+        },
+      },{id: "post-a-post-with-image-galleries",
+        
+          title: "a post with image galleries",
+        
+        description: "this is what included image galleries could look like",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2024/photo-gallery/";
+          
+        },
+      },{id: "post-google-gemini-updates-flash-1-5-gemma-2-and-project-astra",
+        
+          title: 'Google Gemini updates: Flash 1.5, Gemma 2 and Project Astra <svg width="1.2rem" height="1.2rem" top=".5rem" viewbox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><path d="M17 13.5v6H5v-12h6m3-3h6v6m0-6-9 9" class="icon_svg-stroke" stroke="#999" stroke-width="1.5" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"></path></svg>',
+        
+        description: "We’re sharing updates across our Gemini family of models and a glimpse of Project Astra, our vision for the future of AI assistants.",
+        section: "Posts",
+        handler: () => {
+          
+            window.open("https://blog.google/technology/ai/google-gemini-update-flash-ai-assistant-io-2024/", "_blank");
+          
+        },
+      },{id: "post-a-post-with-tabs",
+        
+          title: "a post with tabs",
+        
+        description: "this is what included tabs in a post could look like",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2024/tabs/";
+          
+        },
+      },{id: "post-a-post-with-typograms",
+        
+          title: "a post with typograms",
+        
+        description: "this is what included typograms code could look like",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2024/typograms/";
+          
+        },
+      },{id: "post-a-post-that-can-be-cited",
+        
+          title: "a post that can be cited",
+        
+        description: "this is what a post that can be cited looks like",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2024/post-citation/";
+          
+        },
+      },{id: "post-a-post-with-pseudo-code",
+        
+          title: "a post with pseudo code",
+        
+        description: "this is what included pseudo code could look like",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2024/pseudocode/";
+          
+        },
+      },{id: "post-a-post-with-code-diff",
+        
+          title: "a post with code diff",
+        
+        description: "this is how you can display code diffs",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2024/code-diff/";
+          
+        },
+      },{id: "post-a-post-with-advanced-image-components",
+        
+          title: "a post with advanced image components",
+        
+        description: "this is what advanced image components could look like",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2024/advanced-images/";
+          
+        },
+      },{id: "post-a-post-with-vega-lite",
+        
+          title: "a post with vega lite",
+        
+        description: "this is what included vega lite code could look like",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2024/vega-lite/";
+          
+        },
+      },{id: "post-a-post-with-geojson",
+        
+          title: "a post with geojson",
+        
+        description: "this is what included geojson code could look like",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2024/geojson-map/";
+          
+        },
+      },{id: "post-a-post-with-echarts",
+        
+          title: "a post with echarts",
+        
+        description: "this is what included echarts code could look like",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2024/echarts/";
+          
+        },
+      },{id: "post-a-post-with-chart-js",
+        
+          title: "a post with chart.js",
+        
+        description: "this is what included chart.js code could look like",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2024/chartjs/";
+          
+        },
+      },{id: "post-a-post-with-tikzjax",
+        
+          title: "a post with TikZJax",
+        
+        description: "this is what included TikZ code could look like",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2023/tikzjax/";
+          
+        },
+      },{id: "post-a-post-with-bibliography",
+        
+          title: "a post with bibliography",
+        
+        description: "an example of a blog post with bibliography",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2023/post-bibliography/";
+          
+        },
+      },{id: "post-a-post-with-jupyter-notebook",
+        
+          title: "a post with jupyter notebook",
+        
+        description: "an example of a blog post with jupyter notebook",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2023/jupyter-notebook/";
+          
+        },
+      },{id: "post-a-post-with-custom-blockquotes",
+        
+          title: "a post with custom blockquotes",
+        
+        description: "an example of a blog post with custom blockquotes",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2023/custom-blockquotes/";
+          
+        },
+      },{id: "post-a-post-with-table-of-contents-on-a-sidebar",
+        
+          title: "a post with table of contents on a sidebar",
+        
+        description: "an example of a blog post with table of contents on a sidebar",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2023/sidebar-table-of-contents/";
+          
+        },
+      },{id: "post-a-post-with-audios",
+        
+          title: "a post with audios",
+        
+        description: "this is what included audios could look like",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2023/audios/";
+          
+        },
+      },{id: "post-a-post-with-videos",
+        
+          title: "a post with videos",
+        
+        description: "this is what included videos could look like",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2023/videos/";
+          
+        },
+      },{id: "post-displaying-beautiful-interactive-tables",
+        
+          title: "displaying beautiful interactive tables",
+        
+        description: "an example of how to use interactive tables in al-folio",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2023/tables/";
+          
+        },
+      },{id: "post-a-post-with-table-of-contents",
+        
+          title: "a post with table of contents",
+        
+        description: "an example of a blog post with table of contents",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2023/table-of-contents/";
+          
+        },
+      },{id: "post-a-post-with-giscus-comments",
+        
+          title: "a post with giscus comments",
+        
+        description: "an example of a blog post with giscus comments",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2022/giscus-comments/";
+          
+        },
+      },{id: "post-displaying-external-posts-on-your-al-folio-blog",
+        
+          title: 'Displaying External Posts on Your al-folio Blog <svg width="1.2rem" height="1.2rem" top=".5rem" viewbox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><path d="M17 13.5v6H5v-12h6m3-3h6v6m0-6-9 9" class="icon_svg-stroke" stroke="#999" stroke-width="1.5" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"></path></svg>',
+        
+        description: "",
+        section: "Posts",
+        handler: () => {
+          
+            window.open("https://medium.com/@al-folio/displaying-external-posts-on-your-al-folio-blog-b60a1d241a0a?source=rss-17feae71c3c4------2", "_blank");
+          
+        },
+      },{id: "post-a-post-with-redirect",
+        
+          title: "a post with redirect",
+        
+        description: "you can also redirect to assets like pdf",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/assets/pdf/example_pdf.pdf";
+          
+        },
+      },{id: "post-a-post-with-diagrams",
+        
+          title: "a post with diagrams",
+        
+        description: "an example of a blog post with diagrams",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2021/diagrams/";
+          
+        },
+      },{id: "post-a-distill-style-blog-post",
+        
+          title: "a distill-style blog post",
+        
+        description: "an example of a distill-style blog post and main elements",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2021/distill/";
+          
+        },
+      },{id: "post-a-post-with-twitter",
+        
+          title: "a post with twitter",
+        
+        description: "an example of a blog post with twitter",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2020/twitter/";
+          
+        },
+      },{id: "post-a-post-with-disqus-comments",
+        
+          title: "a post with disqus comments",
+        
+        description: "an example of a blog post with disqus comments",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2015/disqus-comments/";
+          
+        },
+      },{id: "post-a-post-with-math",
+        
+          title: "a post with math",
+        
+        description: "an example of a blog post with some math",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2015/math/";
+          
+        },
+      },{id: "post-a-post-with-code",
+        
+          title: "a post with code",
+        
+        description: "an example of a blog post with some code",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2015/code/";
+          
+        },
+      },{id: "post-a-post-with-images",
+        
+          title: "a post with images",
+        
+        description: "this is what included images could look like",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2015/images/";
+          
+        },
+      },{id: "post-a-post-with-formatting-and-links",
+        
+          title: "a post with formatting and links",
+        
+        description: "march & april, looking forward to summer",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2015/formatting-and-links/";
+          
+        },
+      },{id: "books-the-godfather",
+          title: 'The Godfather',
+          description: "",
+          section: "Books",handler: () => {
+              window.location.href = "/books/the_godfather/";
+            },},{id: "news-a-simple-inline-announcement",
+          title: 'A simple inline announcement.',
+          description: "",
+          section: "News",},{id: "news-a-long-announcement-with-details",
+          title: 'A long announcement with details',
+          description: "",
+          section: "News",handler: () => {
+              window.location.href = "/news/announcement_2/";
+            },},{id: "news-a-simple-inline-announcement-with-markdown-emoji-sparkles-smile",
+          title: 'A simple inline announcement with Markdown emoji! <img class="emoji" title=":sparkles:" alt=":sparkles:" src="https://github.githubassets.com/images/icons/emoji/unicode/2728.png" height="20" width="20"> <img class="emoji" title=":smile:" alt=":smile:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f604.png" height="20" width="20">',
+          description: "",
+          section: "News",},{id: "projects-1d-euler-solver-exact-riemann-solver-fvm",
+          title: '1D Euler Solver: Exact Riemann Solver (FVM)',
+          description: "Finite volume solver for the compressible Euler equations, with an exact Riemann solver (Toro) and RK2 time integration, validated on the Sod shock tube.",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/1_project/";
+            },},{id: "projects-ar-vr-compressible-flow-visualization",
+          title: 'AR/VR Compressible Flow Visualization',
+          description: "Real-time augmented-reality visualization of a transonic Mach sweep around a wing, built in Unreal Engine 5 from CFD field data (pressure coefficient, Mach isosurfaces).",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/ar_mach_sweep/";
+            },},{id: "projects-naca0012-flow-solver-semi-lagrangian-pressure-projection",
+          title: 'NACA0012 Flow Solver: Semi-Lagrangian / Pressure Projection',
+          description: "A 2D incompressible Navier-Stokes solver around a NACA0012 airfoil, built on a MAC staggered grid with semi-Lagrangian advection and a matrix-free conjugate-gradient pressure projection.",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/naca0012_fluidsim_2d/";
+            },},{id: "projects-naca0012-flow-solver-lattice-boltzmann-on-gpu",
+          title: 'NACA0012 Flow Solver: Lattice-Boltzmann on GPU',
+          description: "Real-time GPU Lattice-Boltzmann solver (D2Q9/BGK, OpenCL) for 2D flow around a NACA0012 airfoil, with live angle-of-attack control and OpenGL visualization.",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/naca0012_lbm_gpu/";
+            },},{id: "projects-reusable-opengl-rendering-engine",
+          title: 'Reusable OpenGL Rendering Engine',
+          description: "A small C++/OpenGL rendering engine built to learn GPU programming and graphics architecture from the ground up, now reused across several fluid-simulation projects.",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/opengl_engine/";
+            },},{id: "projects-weakly-compressible-sph-dam-break",
+          title: 'Weakly-Compressible SPH: Dam Break',
+          description: "A CPU smoothed-particle hydrodynamics solver (WCSPH, cubic spline kernel, Tait equation of state) validated on the classic 3D dam-break benchmark.",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/sph_dam_break/";
+            },},{id: "teachings-data-science-fundamentals",
+          title: 'Data Science Fundamentals',
+          description: "This course covers the foundational aspects of data science, including data collection, cleaning, analysis, and visualization. Students will learn practical skills for working with real-world datasets.",
+          section: "Teachings",handler: () => {
+              window.location.href = "/teachings/data-science-fundamentals/";
+            },},{id: "teachings-introduction-to-machine-learning",
+          title: 'Introduction to Machine Learning',
+          description: "This course provides an introduction to machine learning concepts, algorithms, and applications. Students will learn about supervised and unsupervised learning, model evaluation, and practical implementations.",
+          section: "Teachings",handler: () => {
+              window.location.href = "/teachings/introduction-to-machine-learning/";
+            },},{
+        id: 'social-github',
+        title: 'GitHub',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://github.com/valentinpy5-spec", "_blank");
+        },
+      },{
+        id: 'social-linkedin',
+        title: 'LinkedIn',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://www.linkedin.com/in/valentin-py-423728202", "_blank");
+        },
+      },{
+      id: 'light-theme',
+      title: 'Change theme to light',
+      description: 'Change the theme of the site to Light',
+      section: 'Theme',
+      handler: () => {
+        setThemeSetting("light");
+      },
+    },
+    {
+      id: 'dark-theme',
+      title: 'Change theme to dark',
+      description: 'Change the theme of the site to Dark',
+      section: 'Theme',
+      handler: () => {
+        setThemeSetting("dark");
+      },
+    },
+    {
+      id: 'system-theme',
+      title: 'Use system default theme',
+      description: 'Change the theme of the site to System Default',
+      section: 'Theme',
+      handler: () => {
+        setThemeSetting("system");
+      },
+    },];
+
+</script> <script src="/assets/al_search/js/shortcut-key.js"></script> </body> </html>

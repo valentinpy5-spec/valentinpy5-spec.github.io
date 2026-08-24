@@ -5,3 +5,9 @@ design:
     size: a4
     show_footer: false
     show_top_note: false
+  sections:
+    show_time_spans_in: [] # disabled: no "X years Y months" duration badge under any date range
+  templates:
+    education_entry:
+      degree_column: # disabled: DEGREE is folded into main_column instead, avoids the narrow fixed-width degree column truncating longer degree names
+      main_column: "**INSTITUTION**, DEGREE_WITH_AREA\nSUMMARY\nHIGHLIGHTS"

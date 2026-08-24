@@ -1,4 +1,4 @@
 User-agent: *
 Disallow:
 
-Sitemap: https://valentinpy.github.io/sitemap.xml
+Sitemap: https://valentinpy5-spec.github.io/sitemap.xml
