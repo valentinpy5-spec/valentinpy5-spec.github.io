@@ -2,11 +2,19 @@
 layout: page
 title: projects
 permalink: /projects/
-description: A growing collection of your cool projects.
+description: 
 nav: true
 nav_order: 3
-display_categories: [work, fun]
+display_categories: [Internships, Personnal]
 horizontal: false
+_styles: >
+  .github-icon {
+    display: flex;
+    justify-content: center;
+  }
+  .github-icon .gh-icon {
+    font-size: 1.75rem;
+  }
 ---
 
 <!-- pages/projects.md -->

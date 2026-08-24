@@ -5,10 +5,8 @@ on:
       - main
       - master
     paths:
-      - "_data/cv.yml"
+      - "_data/cv.yaml"
       - "assets/rendercv/design.yaml"
-      - "assets/rendercv/locale.yaml"
-      - "assets/rendercv/settings.yaml"
   workflow_call:
   workflow_dispatch:
 permissions:
@@ -27,23 +25,29 @@ jobs:
           pip install -r requirements.txt
       - name: RenderCV
         run: |
-          cv_file=$(find _data  -maxdepth 1 -type f \( -name "cv.yaml" -o -name "cv.yml" \))
-          if [ -z "$cv_file" ]; then
-            echo "No cv.yml file found!"
+          # cv.yaml is the RenderCV-native data file (v2.x format). _data/cv.yml (legacy
+          # al_folio_cv format, label/image/summary/address) powers the /cv/ web page
+          # separately and must not be picked up here.
+          cv_file=_data/cv.yaml
+          if [ ! -f "$cv_file" ]; then
+            echo "No cv.yaml file found!"
             exit 1
           fi
-          rendercv_dir=$(find assets -maxdepth 1 -type d -name "rendercv")
-          if [ -z "$rendercv_dir" ]; then
-            echo "No RenderCV config directory found!"
+          design=assets/rendercv/design.yaml
+          if [ ! -f "$design" ]; then
+            echo "Missing RenderCV design file!"
             exit 1
           fi
-          settings=$(find $rendercv_dir -maxdepth 1 -type f \( -name "settings.yaml" -o -name "settings.yml" \))
-          if [ -z "$settings" ]; then
-            echo "Missing RenderCV config file!"
-            exit 1
-          fi
-          rendercv render $cv_file --settings $settings
-          rm assets/rendercv/rendercv_output/*.typ
+          # NOTE: `rendercv render --settings settings.yaml` silently ignores
+          # settings.render_command.design/locale in RenderCV 2.8 (upstream bug or path
+          # resolution quirk) - it renders with theme defaults instead of failing loudly.
+          # Passing --design directly on the CLI is the only path that reliably applies it.
+          rendercv render $cv_file --design $design \
+            -o assets/rendercv/rendercv_output \
+            --dont-generate-markdown --dont-generate-html --dont-generate-png
+          mv _data/assets/rendercv/rendercv_output/*.pdf assets/rendercv/rendercv_output/
+          rm -rf _data/assets
+          rm -f assets/rendercv/rendercv_output/*.typ
       - name: Upload rendercv_output as an artifact
         uses: actions/upload-artifact@v4
         with:

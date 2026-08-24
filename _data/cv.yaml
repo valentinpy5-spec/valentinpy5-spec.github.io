@@ -1,0 +1,129 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/rendercv/rendercv/refs/tags/v2.8/schema.json
+# RenderCV-native format (v2.x), used only for local/CI PDF generation via `rendercv render`.
+# The web page /cv/ is rendered separately by al_folio_cv from _data/cv.yml (legacy format).
+# Keep both files in sync manually when updating CV content.
+cv:
+  name: Valentin Py
+  headline: Aerospace Engineering Student - Computational Fluid Dynamics & Applied Mathematics
+  location: Toulouse, Occitanie
+  email: valentin.py5@gmail.com
+  photo:
+  phone:
+  website: https://valentinpy5-spec.github.io
+  social_networks:
+    - network: LinkedIn
+      username: valentin-py-423728202
+  sections:
+    summary:
+      - Aerospace engineering student at ISAE-SUPAERO, I made an exchange semester focused on numerical methods for fluid dynamics at the University of Tokyo and followed the M2RI at Université Paul Sabatier.
+      - During my previous internships I developped skills about programming (C++/Java/Python), numerical methods for fluid dynamics (Real-time methods SPH/FLIP-PIC or Riemann solvers) and put hands on simulating software for diffferent CFD cases (STARCCM+/OpenFOAM).
+      - My goal is to strenghened my knowledge at the intersection between applied mathematics and numerical methods for CFD. Driven by rigor and a desire to build next-generation simulation tools, I welcome connections with researchers and laboratories in these fields.
+
+    experience:
+      - company: ISAE-SUPAERO - Department of Aeronautics (DAEP)
+        position: Research & Development Intern - Scientific Visualization & AR/VR
+        location: Toulouse, France
+        start_date: 2026-04
+        end_date: present
+        highlights:
+          - Conducted aerodynamic simulations (RANS/URANS) on a NACA0012 airfoil using STAR-CCM+, focusing on high-fidelity flow physics and vortex dynamics analysis for teaching key concepts of aerodynamics.
+          - Engineered a real-time scientific visualization framework within Unreal Engine 5 using Blueprints & Heterogeneous Volumes/Sparse Volume Textures to render aerodynamic criteria (e.g., Q-criterion, velocity fields, streamlines).
+          - Developped and explored different numerical methods in C++ for real-time fluid dynamics simulations around NACA0012 airfoil (LBM method through GPU computing).
+
+      - company: Ascendance
+        position: Software Engineer Intern on ICD
+        location: Toulouse, France
+        start_date: 2025-03
+        end_date: 2025-08
+        highlights:
+          - Solo developed, tested, and integrated a software using Python and JavaFX to manage the Interface Control Documents (ICD) for a hybrid-electric aircraft.
+          - Designed automated validation and verification (V&V) workflows to bridge the gap between ICD specifications and hardware test benches using custom Python automation scripts.
+          - Contributed to an innovative thermal-electric propulsion project, strengthening skills in analyzing multidisciplinary data coupling and complex systems engineering.
+
+      - company: Fondation ISAE-SUPAERO
+        position: Communications & Outreach Officer - OSE ISAE-SUPAERO Program
+        location: Toulouse, France
+        start_date: 2024-03
+        end_date: 2025-03
+        summary: Member of the student team leading the OSE (Ouverture Sociale Étudiante) program at ISAE-SUPAERO, responsible for communicating the program's actions and promoting equal opportunities among youth. The OSE program supports more than 1,000 high school and middle school students each year across nearly 30 institutions in the Occitanie region.
+        highlights:
+          - Covered events and interventions aimed at promoting equal opportunities among youth.
+          - Wrote articles detailing the latest initiatives to ensure visibility of the various projects led by OSE.
+
+      - company: Hinfact
+        position: Internship - Data Management & Process Digitization
+        location: Toulouse, France
+        start_date: 2024-06
+        end_date: 2024-08
+        highlights:
+          - Structured database and web interfaces to centralize and process training data for airline pilots.
+          - Architected information management tools (inventories, functional guides, relational databases) using Notion.
+          - Developed competencies in data curation, information architecture, and process digitization within a fast-paced aerospace tech environment.
+
+    education:
+      - institution: Université Toulouse III - Paul Sabatier
+        area: Master 2 Recherche et Innovation (M2RI) - Parcours Déterministe, EDP et Simulations Numériques
+        degree: MSc
+        location: Toulouse, France
+        start_date: 2026-09
+        end_date: 2027-08
+        highlights:
+          - "Coursework: An Introduction to the Theoretical and Numerical Analysis of Scalar Conservation Laws; Controlled Dynamical Systems: Structured Modelling and Numerical Methods; Regularization of Ill-posed Inverse Problems and Applications; High-Performance Computing (MPI, OpenMP, CUDA)."
+          - Double-degree track with the 3rd-year ISAE-SUPAERO curriculum, focused on rigorous numerical analysis of PDEs applied to CFD.
+
+      - institution: University of Tokyo
+        area: Aerospace, Aeronautical and Astronautical Engineering
+        degree: Exchange
+        location: Tokyo, Japan
+        start_date: 2025-09
+        end_date: 2026-03
+        highlights:
+          - "Coursework: Advanced Theoretical Numerical Simulation; Discretization Schemes (FDM/FVM); Lattice Boltzmann Method (LBM); Fluid-Structure Interaction (FSI) applied to bioengineering frameworks."
+          - "Academic project: high-fidelity aerodynamic simulations on a NACA 0012 airfoil using OpenFOAM, analyzing mesh convergence and solver stability."
+
+      - institution: ISAE-SUPAERO
+        area: Aerospace, Aeronautical and Astronautical Engineering - Fluid Dynamics / Internal Aerodynamics (Propulsion, Combustion) & Applied Mathematics
+        degree: MEng
+        location: Toulouse, France
+        start_date: 2023
+        end_date: 2027
+        highlights:
+          - "Core coursework: advanced multi-physics fluid dynamics (unsteady, 3D, aeroacoustics, aeroelasticity), numerical simulation and turbulence (instabilities, turbulence modeling, numerical methods)."
+          - "Turbomachines & Combustion track: turbomachinery aerodynamics, two-phase flows and combustion, design case studies."
+          - "Technical expertise: hands-on experience with industry-standard CFD software and solvers (Ansys, STAR-CCM+, OpenFOAM) for complex flow analysis and turbulence modeling."
+
+    projects:
+      - name: SPH Fluid Solver (C++/OpenGL)
+        summary: Weakly-compressible smoothed-particle hydrodynamics solver (cubic spline kernel, Tait equation of state), validated on the classic dam-break benchmark and rendered in real time with a custom OpenGL engine.
+        highlights:
+          - "[valentinpy5-spec.github.io/projects/sph_dam_break](https://valentinpy5-spec.github.io/projects/sph_dam_break/)"
+
+      - name: Exact Riemann Solver for the 1D Euler Equations
+        summary: Finite volume solver for the compressible Euler equations with an exact Riemann solver (Newton-Raphson star-region pressure) and RK2 time integration, validated on the Sod shock tube.
+        highlights:
+          - "[valentinpy5-spec.github.io/projects/1_project](https://valentinpy5-spec.github.io/projects/1_project/)"
+
+      - name: NACA0012 Flow Solver (LBM, GPU)
+        summary: Real-time Lattice-Boltzmann (D2Q9/BGK) solver in OpenCL for 2D flow around a NACA0012 airfoil, with live angle-of-attack control and OpenGL visualization.
+        highlights:
+          - "[valentinpy5-spec.github.io/projects/naca0012_lbm_gpu](https://valentinpy5-spec.github.io/projects/naca0012_lbm_gpu/)"
+
+    skills:
+      - label: CFD & Numerical Methods
+        details: "FDM, FVM, LBM, Discretization Schemes, Turbulence Modeling, Mesh Convergence, Scalar Conservation Laws"
+      - label: CFD Software
+        details: "STAR-CCM+, OpenFOAM, Ansys"
+      - label: HPC & GPU Computing
+        details: "MPI, OpenMP, CUDA, OpenCL"
+      - label: Scientific Programming
+        details: "Python (PyVista, NumPy), C++, JavaFX"
+      - label: Scientific Visualization
+        details: "ParaView, Blender, Unreal Engine 5, OpenGL, OpenVDB/NanoVDB, AR/VR pipelines"
+      - label: Tools
+        details: "Git, Cycle en V, Notion"
+
+    languages:
+      - label: French
+        details: Native speaker
+      - label: English
+        details: Fluent
