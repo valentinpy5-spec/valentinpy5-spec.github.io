@@ -2,11 +2,12 @@ cv:
   name: Valentin Py
   label: Aerospace Engineering Student - Computational Fluid Dynamics & Applied Mathematics
   email: valentin.py5@gmail.com
-  location: Toulouse Occitanie
+  location: ISAE-SUPAERO, Toulouse
   image: ""
   summary: >
-    Aerospace engineering student at ISAE-SUPAERO, I made an exchange semester focused on numerical methods for
-    fluid dynamics at the University of Tokyo and followed the M2RI at Université Paul Sabatier.
+    Aerospace engineering student at ISAE-SUPAERO within the Propulsion and Combustion track, I made an exchange
+    semester focused on numerical methods for fluid dynamics at the University of Tokyo and followed the M2RI at
+    Université Paul Sabatier.
     <br><br>
     During my previous internships I developped skills about programming (C++/Java/Python), numerical methods for
     fluid dynamics (Real-time methods SPH/FLIP-PIC or Riemann solvers) and put hands on simulating software for
@@ -23,8 +24,8 @@ cv:
       username: valentinpy5-spec
 
   address:
-    city: Toulouse
-    region: Occitanie
+    city: ISAE-SUPAERO
+    region: Toulouse
     countryCode: FR
 
   sections:
@@ -75,8 +76,8 @@ cv:
         start_date: 2026-04
         end_date: ""
         highlights:
-          - "Conducted aerodynamic simulations (RANS/URANS) on a NACA0012 airfoil using STAR-CCM+, focusing on high-fidelity flow physics and vortex dynamics analysis for teaching key concepts of aerodynamics."
-          - "Engineered a real-time scientific visualization framework within Unreal Engine 5 using Blueprints & Heterogeneous Volumes/Sparse Volume Textures to render aerodynamic criteria (e.g., Q-criterion, velocity fields, streamlines)."
+          - "Conducted aerodynamic simulations (RANS/URANS) on a NACA0012 airfoil using STAR-CCM+, focusing on flow physics analysis for teaching key concepts of aerodynamics."
+          - "Engineered a real-time VR/AR visualization framework within Unreal Engine 5 using Blueprints & post-processing softwares like Paraview and Blender to render aerodynamic criteria (e.g., Q-criterion, velocity fields, streamlines)."
           - "Developped and explored different numerical methods in C++ for real-time fluid dynamics simulations around NACA0012 airfoil (LBM method through GPU computing)."
 
       - company: Ascendance
@@ -113,10 +114,42 @@ cv:
           - "Architected information management tools (inventories, functional guides, relational databases) using Notion."
           - "Developed competencies in data curation, information architecture, and process digitization within a fast-paced aerospace tech environment."
 
+    Volunteer:
+      - company: OSE ISAE-SUPAERO Program
+        position: Student Volunteer
+        location: Toulouse, France
+        start_date: 2023-09
+        end_date: 2025-02
+        highlights:
+          - "Tutoring and academic mentoring for high-school students (Seconde to Terminale) as part of a \"cordées de la réussite\" outreach program."
+
+      - company: SCUBE Rocketry Club - ISAE-SUPAERO
+        position: Treasurer
+        location: Toulouse, France
+        start_date: 2023-09
+        end_date: 2025-02
+        highlights:
+          - "Completed a 5-month training program leading to the launch of a mini-rocket with CNES (aerodynamics, propulsion, Python programming)."
+
+      - company: Arts & Travel Association - ISAE-SUPAERO
+        position: President, Travel Branch
+        location: Toulouse, France
+        start_date: 2023-09
+        end_date: 2025-02
+        highlights:
+          - "Organized cultural trips in several European countries (Italy, Spain)."
+
+    Interests:
+      - name: Hobbies
+        keywords:
+          - "Trail running"
+          - "Climbing"
+          - "Swimming"
+
     Skills:
       - name: CFD & Numerical Methods
         icon: fa-solid fa-water
-        keywords: "FDM, FVM, LBM, Discretization Schemes, Turbulence Modeling, Mesh Convergence, Scalar Conservation Laws"
+        keywords: "FDM, FVM, LBM, Galerkin Method, Turbulence Modeling, Mesh Convergence, Scalar Conservation Laws"
 
       - name: CFD Software
         icon: fa-solid fa-wind
@@ -128,11 +161,11 @@ cv:
 
       - name: Scientific Programming
         icon: fa-solid fa-code
-        keywords: "Python (PyVista, NumPy), C++, JavaFX"
+        keywords: "Python (PyVista, NumPy), C++, Java"
 
       - name: Scientific Visualization
         icon: fa-solid fa-eye
-        keywords: "ParaView, Blender, Unreal Engine 5, OpenGL, OpenVDB/NanoVDB, AR/VR pipelines"
+        keywords: "ParaView, Blender, Unreal Engine 5, OpenGL, AR/VR pipelines"
 
       - name: Tools
         icon: fa-solid fa-toolbox
@@ -144,3 +177,9 @@ cv:
 
       - name: English
         summary: "Fluent"
+
+      - name: Japanese
+        summary: "Beginner"
+
+      - name: German
+        summary: "Beginner"

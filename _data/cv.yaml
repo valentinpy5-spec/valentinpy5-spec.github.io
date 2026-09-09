@@ -5,7 +5,7 @@
 cv:
   name: Valentin Py
   headline: Aerospace Engineering Student - Computational Fluid Dynamics & Applied Mathematics
-  location: Toulouse, Occitanie
+  location: ISAE-SUPAERO, Toulouse
   email: valentin.py5@gmail.com
   photo:
   phone:
@@ -15,7 +15,7 @@ cv:
       username: valentin-py-423728202
   sections:
     summary:
-      - Aerospace engineering student at ISAE-SUPAERO, I made an exchange semester focused on numerical methods for fluid dynamics at the University of Tokyo and followed the M2RI at Université Paul Sabatier.
+      - Aerospace engineering student at ISAE-SUPAERO within the Propulsion and Combustion track, I made an exchange semester focused on numerical methods for fluid dynamics at the University of Tokyo and followed the M2RI at Université Paul Sabatier.
       - During my previous internships I developped skills about programming (C++/Java/Python), numerical methods for fluid dynamics (Real-time methods SPH/FLIP-PIC or Riemann solvers) and put hands on simulating software for diffferent CFD cases (STARCCM+/OpenFOAM).
       - My goal is to strenghened my knowledge at the intersection between applied mathematics and numerical methods for CFD. Driven by rigor and a desire to build next-generation simulation tools, I welcome connections with researchers and laboratories in these fields.
 
@@ -26,8 +26,8 @@ cv:
         start_date: 2026-04
         end_date: present
         highlights:
-          - Conducted aerodynamic simulations (RANS/URANS) on a NACA0012 airfoil using STAR-CCM+, focusing on high-fidelity flow physics and vortex dynamics analysis for teaching key concepts of aerodynamics.
-          - Engineered a real-time scientific visualization framework within Unreal Engine 5 using Blueprints & Heterogeneous Volumes/Sparse Volume Textures to render aerodynamic criteria (e.g., Q-criterion, velocity fields, streamlines).
+          - Conducted aerodynamic simulations (RANS/URANS) on a NACA0012 airfoil using STAR-CCM+, focusing on flow physics analysis for teaching key concepts of aerodynamics.
+          - Engineered a real-time VR/AR visualization framework within Unreal Engine 5 using Blueprints & post-processing softwares like Paraview and Blender to render aerodynamic criteria (e.g., Q-criterion, velocity fields, streamlines).
           - Developped and explored different numerical methods in C++ for real-time fluid dynamics simulations around NACA0012 airfoil (LBM method through GPU computing).
 
       - company: Ascendance
@@ -72,8 +72,8 @@ cv:
           - Double-degree track with the 3rd-year ISAE-SUPAERO curriculum, focused on rigorous numerical analysis of PDEs applied to CFD.
 
       - institution: University of Tokyo
-        area: Aerospace, Aeronautical and Astronautical Engineering
-        degree: Exchange
+        area: Aerospace, Aeronautical and Astronautical Engineering (Exchange Semester)
+        degree:
         location: Tokyo, Japan
         start_date: 2025-09
         end_date: 2026-03
@@ -108,17 +108,39 @@ cv:
         highlights:
           - "[valentinpy5-spec.github.io/projects/naca0012_lbm_gpu](https://valentinpy5-spec.github.io/projects/naca0012_lbm_gpu/)"
 
+    extracurricular_activities:
+      - name: OSE ISAE-SUPAERO Program
+        summary: "Toulouse, France | September 2023 - February 2025"
+        highlights:
+          - "Tutoring and academic mentoring for high-school students (Seconde to Terminale) as part of a \"cordées de la réussite\" outreach program."
+
+      - name: SCUBE Rocketry Club - ISAE-SUPAERO
+        summary: "Toulouse, France | September 2023 - February 2025"
+        highlights:
+          - "Treasurer of the school's rocketry club."
+          - "Completed a 5-month training program leading to the launch of a mini-rocket with CNES (aerodynamics, propulsion, Python programming)."
+
+      - name: Arts & Travel Association - ISAE-SUPAERO
+        summary: "Toulouse, France | September 2023 - February 2025"
+        highlights:
+          - "President of the travel branch, in charge of organizing cultural trips abroad."
+          - "Organized cultural trips in several European countries (Italy, Spain)."
+
+    interests:
+      - name: Hobbies
+        summary: "Trail running, Climbing, Swimming"
+
     skills:
       - label: CFD & Numerical Methods
-        details: "FDM, FVM, LBM, Discretization Schemes, Turbulence Modeling, Mesh Convergence, Scalar Conservation Laws"
+        details: "FDM, FVM, LBM, Galerkin Method, Turbulence Modeling, Mesh Convergence, Scalar Conservation Laws"
       - label: CFD Software
         details: "STAR-CCM+, OpenFOAM, Ansys"
       - label: HPC & GPU Computing
         details: "MPI, OpenMP, CUDA, OpenCL"
       - label: Scientific Programming
-        details: "Python (PyVista, NumPy), C++, JavaFX"
+        details: "Python (PyVista, NumPy), C++, Java"
       - label: Scientific Visualization
-        details: "ParaView, Blender, Unreal Engine 5, OpenGL, OpenVDB/NanoVDB, AR/VR pipelines"
+        details: "ParaView, Blender, Unreal Engine 5, OpenGL, AR/VR pipelines"
       - label: Tools
         details: "Git, Cycle en V, Notion"
 
@@ -127,3 +149,7 @@ cv:
         details: Native speaker
       - label: English
         details: Fluent
+      - label: Japanese
+        details: Beginner
+      - label: German
+        details: Beginner
