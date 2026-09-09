@@ -2,17 +2,10 @@
 # RenderCV-native format (v2.x), used only for local/CI PDF generation via `rendercv render`.
 # The web page /cv/ is rendered separately by al_folio_cv from _data/cv.yml (legacy format).
 # Keep both files in sync manually when updating CV content.
-design:
-  theme: classic
-  page:
-    top_margin: 0.55in
-    bottom_margin: 0.55in
-    left_margin: 0.55in
-    right_margin: 0.55in
-  typography:
-    font_size:
-      body: 10.2pt
-
+# Design settings (theme, page size/margins, font sizes, templates) live in
+# assets/rendercv/design.yaml, NOT here - the CI workflow (.github/workflows/render-cv.yml)
+# always renders with `--design assets/rendercv/design.yaml`, which overrides any `design:`
+# block in this file entirely. Adding one here has no effect on the actual generated PDF.
 cv:
   name: Valentin Py
   headline: Aerospace Engineering Student - Computational Fluid Dynamics & Applied Mathematics

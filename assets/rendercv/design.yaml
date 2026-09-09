@@ -5,6 +5,13 @@ design:
     size: a4
     show_footer: false
     show_top_note: false
+    top_margin: 0.55in
+    bottom_margin: 0.55in
+    left_margin: 0.55in
+    right_margin: 0.55in
+  typography:
+    font_size:
+      body: 10.2pt
   sections:
     show_time_spans_in: [] # disabled: no "X years Y months" duration badge under any date range
   templates:
