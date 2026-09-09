@@ -2,6 +2,17 @@
 # RenderCV-native format (v2.x), used only for local/CI PDF generation via `rendercv render`.
 # The web page /cv/ is rendered separately by al_folio_cv from _data/cv.yml (legacy format).
 # Keep both files in sync manually when updating CV content.
+design:
+  theme: classic
+  page:
+    top_margin: 0.55in
+    bottom_margin: 0.55in
+    left_margin: 0.55in
+    right_margin: 0.55in
+  typography:
+    font_size:
+      body: 10.2pt
+
 cv:
   name: Valentin Py
   headline: Aerospace Engineering Student - Computational Fluid Dynamics & Applied Mathematics
@@ -40,16 +51,6 @@ cv:
           - Designed automated validation and verification (V&V) workflows to bridge the gap between ICD specifications and hardware test benches using custom Python automation scripts.
           - Contributed to an innovative thermal-electric propulsion project, strengthening skills in analyzing multidisciplinary data coupling and complex systems engineering.
 
-      - company: Fondation ISAE-SUPAERO
-        position: Communications & Outreach Officer - OSE ISAE-SUPAERO Program
-        location: Toulouse, France
-        start_date: 2024-03
-        end_date: 2025-03
-        summary: Member of the student team leading the OSE (Ouverture Sociale Étudiante) program at ISAE-SUPAERO, responsible for communicating the program's actions and promoting equal opportunities among youth. The OSE program supports more than 1,000 high school and middle school students each year across nearly 30 institutions in the Occitanie region.
-        highlights:
-          - Covered events and interventions aimed at promoting equal opportunities among youth.
-          - Wrote articles detailing the latest initiatives to ensure visibility of the various projects led by OSE.
-
       - company: Hinfact
         position: Internship - Data Management & Process Digitization
         location: Toulouse, France
@@ -59,6 +60,20 @@ cv:
           - Structured database and web interfaces to centralize and process training data for airline pilots.
           - Architected information management tools (inventories, functional guides, relational databases) using Notion.
           - Developed competencies in data curation, information architecture, and process digitization within a fast-paced aerospace tech environment.
+
+    skills:
+      - label: CFD & Numerical Methods
+        details: "FDM, FVM, LBM, Galerkin Method, Turbulence Modeling, Mesh Convergence, Scalar Conservation Laws"
+      - label: CFD Software
+        details: "STAR-CCM+, OpenFOAM, Ansys"
+      - label: HPC & GPU Computing
+        details: "MPI, OpenMP, CUDA, OpenCL"
+      - label: Scientific Programming
+        details: "Python (PyVista, NumPy), C++, Java"
+      - label: Scientific Visualization
+        details: "ParaView, Blender, Unreal Engine 5, OpenGL, AR/VR pipelines"
+      - label: Tools
+        details: "Git, Cycle en V, Notion"
 
     education:
       - institution: Université Toulouse III - Paul Sabatier
@@ -92,6 +107,25 @@ cv:
           - "Turbomachines & Combustion track: turbomachinery aerodynamics, two-phase flows and combustion, design case studies."
           - "Technical expertise: hands-on experience with industry-standard CFD software and solvers (Ansys, STAR-CCM+, OpenFOAM) for complex flow analysis and turbulence modeling."
 
+    extracurricular_activities:
+      - name: OSE ISAE-SUPAERO Program
+        summary: "Toulouse, France | September 2023 - February 2025"
+        highlights:
+          - "Communications & Outreach Officer: member of the student team leading the OSE (Ouverture Sociale Étudiante) program, communicating the program's actions and promoting equal opportunities among youth (covered events, wrote articles detailing the latest initiatives)."
+          - "Student Tutor: tutoring and academic mentoring for high-school students (Seconde to Terminale) as part of a \"cordées de la réussite\" outreach program."
+
+      - name: SCUBE Rocketry Club - ISAE-SUPAERO
+        summary: "Toulouse, France | September 2023 - February 2025"
+        highlights:
+          - "Treasurer of the school's rocketry club."
+          - "Completed a 5-month training program leading to the launch of a mini-rocket with CNES (aerodynamics, propulsion, Python programming)."
+
+      - name: Arts & Travel Association - ISAE-SUPAERO
+        summary: "Toulouse, France | September 2023 - February 2025"
+        highlights:
+          - "President of the travel branch, in charge of organizing cultural trips abroad."
+          - "Organized cultural trips in several European countries (Italy, Spain)."
+
     projects:
       - name: SPH Fluid Solver (C++/OpenGL)
         summary: Weakly-compressible smoothed-particle hydrodynamics solver (cubic spline kernel, Tait equation of state), validated on the classic dam-break benchmark and rendered in real time with a custom OpenGL engine.
@@ -108,41 +142,9 @@ cv:
         highlights:
           - "[valentinpy5-spec.github.io/projects/naca0012_lbm_gpu](https://valentinpy5-spec.github.io/projects/naca0012_lbm_gpu/)"
 
-    extracurricular_activities:
-      - name: OSE ISAE-SUPAERO Program
-        summary: "Toulouse, France | September 2023 - February 2025"
-        highlights:
-          - "Tutoring and academic mentoring for high-school students (Seconde to Terminale) as part of a \"cordées de la réussite\" outreach program."
-
-      - name: SCUBE Rocketry Club - ISAE-SUPAERO
-        summary: "Toulouse, France | September 2023 - February 2025"
-        highlights:
-          - "Treasurer of the school's rocketry club."
-          - "Completed a 5-month training program leading to the launch of a mini-rocket with CNES (aerodynamics, propulsion, Python programming)."
-
-      - name: Arts & Travel Association - ISAE-SUPAERO
-        summary: "Toulouse, France | September 2023 - February 2025"
-        highlights:
-          - "President of the travel branch, in charge of organizing cultural trips abroad."
-          - "Organized cultural trips in several European countries (Italy, Spain)."
-
     interests:
       - name: Hobbies
         summary: "Trail running, Climbing, Swimming"
-
-    skills:
-      - label: CFD & Numerical Methods
-        details: "FDM, FVM, LBM, Galerkin Method, Turbulence Modeling, Mesh Convergence, Scalar Conservation Laws"
-      - label: CFD Software
-        details: "STAR-CCM+, OpenFOAM, Ansys"
-      - label: HPC & GPU Computing
-        details: "MPI, OpenMP, CUDA, OpenCL"
-      - label: Scientific Programming
-        details: "Python (PyVista, NumPy), C++, Java"
-      - label: Scientific Visualization
-        details: "ParaView, Blender, Unreal Engine 5, OpenGL, AR/VR pipelines"
-      - label: Tools
-        details: "Git, Cycle en V, Notion"
 
     languages:
       - label: French

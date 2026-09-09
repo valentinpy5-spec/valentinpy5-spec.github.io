@@ -90,20 +90,6 @@ cv:
           - "Designed automated validation and verification (V&V) workflows to bridge the gap between ICD specifications and hardware test benches using custom Python automation scripts."
           - "Contributed to an innovative thermal-electric propulsion project, strengthening skills in analyzing multidisciplinary data coupling and complex systems engineering."
 
-      - company: Fondation ISAE-SUPAERO
-        position: Communications & Outreach Officer - OSE ISAE-SUPAERO Program
-        location: Toulouse, France
-        start_date: 2024-03
-        end_date: 2025-03
-        summary: >
-          Member of the student team leading the OSE (Ouverture Sociale Étudiante) program at ISAE-SUPAERO,
-          responsible for communicating the program's actions and promoting equal opportunities among youth. The
-          OSE program supports more than 1,000 high school and middle school students each year across nearly
-          30 institutions in the Occitanie region.
-        highlights:
-          - "Covered events and interventions aimed at promoting equal opportunities among youth."
-          - "Wrote articles detailing the latest initiatives to ensure visibility of the various projects led by OSE."
-
       - company: Hinfact
         position: Internship - Data Management & Process Digitization
         location: Toulouse, France
@@ -116,12 +102,13 @@ cv:
 
     Volunteer:
       - company: OSE ISAE-SUPAERO Program
-        position: Student Volunteer
+        position: Communications & Outreach Officer / Student Tutor
         location: Toulouse, France
         start_date: 2023-09
         end_date: 2025-02
         highlights:
-          - "Tutoring and academic mentoring for high-school students (Seconde to Terminale) as part of a \"cordées de la réussite\" outreach program."
+          - "Communications & Outreach Officer: member of the student team leading the OSE (Ouverture Sociale Étudiante) program, communicating the program's actions and promoting equal opportunities among youth (covered events, wrote articles detailing the latest initiatives)."
+          - "Student Tutor: tutoring and academic mentoring for high-school students (Seconde to Terminale) as part of a \"cordées de la réussite\" outreach program."
 
       - company: SCUBE Rocketry Club - ISAE-SUPAERO
         position: Treasurer
